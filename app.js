@@ -10,6 +10,7 @@ const cors = require('cors');
 const productRoutes = require('./src/routes/product.route');
 const authRoutes = require('./src/routes/auth.route');
 const reviewRoutes = require('./src/routes/review.route');
+const orderRoutes = require('./src/routes/order.route');
 
 // Database
 const db = require("./src/config/db.config");
@@ -25,6 +26,7 @@ app.use('/public', express.static("public"));
 app.use('/', productRoutes);
 app.use('/', authRoutes);
 app.use('/', reviewRoutes);
+app.use('/', orderRoutes);
 
 
 const port = process.env.PORT || 8000;

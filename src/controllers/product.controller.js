@@ -1,5 +1,6 @@
 const db = require("../config/db.config");
 const Product = db.products;
+const Review = db.reviews;
 
 // Create and Save a new Product
 exports.createProduct = async (req, res) => {
@@ -72,6 +73,7 @@ exports.updateProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
 	const id = req.params.id;
 	try {
+		await Review.destroy({where: {productId: id}});
 		const num = await Product.destroy({where: {id: id}});
 		if(num == 1){
 			return res.json({message: 'Product Deleted with id=' + id})

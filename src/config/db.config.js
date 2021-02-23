@@ -32,10 +32,28 @@ db.sequelize = sequelize;
 db.products = require("../models/product.model.js")(sequelize);
 db.reviews = require("../models/review.model.js")(sequelize);
 db.users = require("../models/user.model.js")(sequelize);
+db.orders = require("../models/order.model.js")(sequelize);
+db.order_items = require("../models/orderItem.model.js")(sequelize);
 
 // Relations
 db.products.hasMany(db.reviews, {as: "reviews"});
 db.reviews.belongsTo(db.products, {
+  foreignKey: "productId",
+  as: "product"
+})
+
+db.users.hasMany(db.orders, {as: "orders"});
+db.orders.belongsTo(db.users, {
+  foreignKey: "userId",
+  as: "user"
+})
+
+db.orders.hasMany(db.order_items, {as: "order_items"});
+db.order_items.belongsTo(db.orders, {
+  foreignKey: "orderId",
+  as: "order"
+})
+db.order_items.belongsTo(db.products, {
   foreignKey: "productId",
   as: "product"
 })
