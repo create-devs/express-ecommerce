@@ -29,6 +29,7 @@ const db = {};
 db.sequelize = sequelize;
 
 // Init Tables
+db.categories = require("../models/category.model.js")(sequelize);
 db.products = require("../models/product.model.js")(sequelize);
 db.reviews = require("../models/review.model.js")(sequelize);
 db.users = require("../models/user.model.js")(sequelize);
@@ -56,6 +57,17 @@ db.order_items.belongsTo(db.orders, {
 db.order_items.belongsTo(db.products, {
   foreignKey: "productId",
   as: "product"
+})
+
+db.products.belongsToMany(db.categories, {
+  through: "product_cat",
+  as: "categories",
+  foreignKey: "productId"
+})
+db.categories.belongsToMany(db.products, {
+  through: "product_cat",
+  as: "products",
+  foreignKey: "catId"
 })
 
 

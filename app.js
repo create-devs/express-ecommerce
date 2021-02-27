@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 // Getting Routes
+const catRoutes = require('./src/routes/category.route');
 const productRoutes = require('./src/routes/product.route');
 const authRoutes = require('./src/routes/auth.route');
 const reviewRoutes = require('./src/routes/review.route');
@@ -23,6 +24,7 @@ app.use(cors());
 app.use('/public', express.static("public"));
 
 // Actual Routes
+app.use('/', catRoutes);
 app.use('/', productRoutes);
 app.use('/', authRoutes);
 app.use('/', reviewRoutes);

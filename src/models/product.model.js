@@ -23,9 +23,6 @@ module.exports = (sequelize) => {
         sale_price: {
             type: DataTypes.INTEGER
         },
-        category: {
-            type: DataTypes.STRING
-        },
         manage_stock: {
             type: DataTypes.BOOLEAN
         },
