@@ -7,10 +7,7 @@ module.exports = (sequelize) => {
         },
         slug: {
             type: DataTypes.STRING
-        },
-        parentId: {
-            type: DataTypes.INTEGER
-        },
+        }
     });
 
     return Category;

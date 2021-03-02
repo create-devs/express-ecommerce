@@ -16,10 +16,23 @@ exports.createProduct = async (req, res) => {
 
 	const {title, description, price, sale_price, category, manage_stock, stock} = req.body;
 
-	const product = {title, description, price, sale_price, category, manage_stock, stock, image: images};
+	const product = {title, description, price, sale_price, manage_stock, stock, image: images};
 
 	try {
 		const data = await Product.create(product);
+		if(category){
+			try {
+				const cat = await Category.findByPk(category);
+				if(!cat){
+					res.json({ message: 'Category Not Found'})
+				}
+				cat.addProduct(data.id);
+			} catch (err) {
+				res.status(500).json({
+					message: err.message
+				})
+			}
+		}
 		res.json(data);
 	} catch (err) {
 		res.status(500).json({
@@ -33,7 +46,11 @@ exports.createProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
 	const query = dbQuery(req.query);
 	try {
-		const data = await Product.findAll(query);
+		const data = await Product.findAll({
+			include: query,
+            limit: req.query.limit ? parseInt(req.query.limit) : 10,
+            offset: req.query.page ? parseInt(req.query.limit * (req.query.page - 1)) : undefined}
+			);
 		res.json(data);
 	} catch (err) {
 		res.status(500).json({
@@ -41,6 +58,17 @@ exports.getAllProducts = async (req, res) => {
 		});
 	}
 };
+
+exports.getProductCount = async (req, res) => {
+	try {
+		const data = await Product.count();
+		res.json(data);
+	} catch (err) {
+		res.status(500).json({
+			message: err.message
+		});
+	}
+}
 
 exports.getProductByCategory = async (req, res) => {
 	try {

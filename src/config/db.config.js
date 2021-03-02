@@ -37,7 +37,7 @@ db.orders = require("../models/order.model.js")(sequelize);
 db.order_items = require("../models/orderItem.model.js")(sequelize);
 
 // Relations
-db.products.hasMany(db.reviews, {as: "reviews"});
+db.products.hasMany(db.reviews, {as: "reviews", onDelete: 'CASCADE'});
 db.reviews.belongsTo(db.products, {
   foreignKey: "productId",
   as: "product"
@@ -49,25 +49,36 @@ db.orders.belongsTo(db.users, {
   as: "user"
 })
 
+// OrderItems for Order
 db.orders.hasMany(db.order_items, {as: "order_items"});
 db.order_items.belongsTo(db.orders, {
   foreignKey: "orderId",
-  as: "order"
+  as: "order",
 })
 db.order_items.belongsTo(db.products, {
   foreignKey: "productId",
   as: "product"
 })
 
+// Product Categories
 db.products.belongsToMany(db.categories, {
   through: "product_cat",
   as: "categories",
-  foreignKey: "productId"
+  foreignKey: "productId",
+  onDelete: 'CASCADE'
 })
 db.categories.belongsToMany(db.products, {
   through: "product_cat",
   as: "products",
-  foreignKey: "catId"
+  foreignKey: "catId",
+  onDelete: 'CASCADE'
+})
+
+// Nested Categories
+db.categories.hasMany(db.categories, {as: "categories"});
+db.categories.belongsTo(db.categories, {
+  foreignKey: "categoryId",
+  as: "category"
 })
 
 
